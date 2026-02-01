@@ -1,9 +1,9 @@
 import {Ticket} from '../models/ticket.model.js';
 
 
-export const getAllTickets = async (req, res) => {
+export const getAllTickets = async (req,res) => {
   try {
-    const { q, status, priority, sort, page = 1, limit = 10 } = req.query;
+    const { q,status,priority,sort,page = 1,limit = 10}=req.query;
     const filter = {};
     
     if (q) {
@@ -12,19 +12,14 @@ export const getAllTickets = async (req, res) => {
         { description: { $regex: q, $options: 'i' } }
       ];
     }
-    
-    // Filter by status
     if (status) {
       filter.status = status;
     }
-    
-    // Filter by priority
     if (priority) {
       filter.priority = priority;
     }
     
-    // Build sort object
-    let sortOption = { createdAt: -1 }; // default: newest first
+    let sortOption = { createdAt: -1 }; 
     if (sort) {
       const sortFields = sort.split(',');
       sortOption = {};
@@ -37,17 +32,14 @@ export const getAllTickets = async (req, res) => {
       });
     }
     
-    // Pagination
-    const skip = (parseInt(page) - 1) * parseInt(limit);
-    const limitNum = parseInt(limit);
+    const skip =(parseInt(page) - 1)*parseInt(limit);
+    const limitNum =parseInt(limit);
     
-    // Execute query
-    const tickets = await Ticket.find(filter)
+    const tickets=await Ticket.find(filter)
       .sort(sortOption)
       .skip(skip)
       .limit(limitNum);
-    
-    // Get total count for pagination
+
     const total = await Ticket.countDocuments(filter);
     
     res.status(200).json({

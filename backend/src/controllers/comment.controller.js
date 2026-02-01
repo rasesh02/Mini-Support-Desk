@@ -19,22 +19,16 @@ export const getCommentsByTicketId = async (req, res) => {
     const limitNum = parseInt(limit);
     
     // Fetch comments
-    const comments = await Comment.find({ ticketId: id })
-      .sort({ createdAt: -1 })
+    const comments = await Comment.find({ ticketId: id }).sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNum);
     
     // Get total count
     const total = await Comment.countDocuments({ ticketId: id });
-    
     res.status(200).json({
       success: true,
       data: comments,
-      pagination: {
-        page: parseInt(page),
-        limit: limitNum,
-        total,
-        totalPages: Math.ceil(total / limitNum)
+      pagination: {page: parseInt(page),limit: limitNum,total,totalPages: Math.ceil(total / limitNum)
       }
     });
   } catch (error) {
