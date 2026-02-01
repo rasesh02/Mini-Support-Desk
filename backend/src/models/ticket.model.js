@@ -27,4 +27,10 @@ const TicketSchema = new mongoose.Schema({
     timestamps: true 
 });
 
+// Indexes for filtering and sorting
+TicketSchema.index({ createdAt: -1 });
+TicketSchema.index({ status: 1 });
+TicketSchema.index({ priority: 1 });
+TicketSchema.index({ title: 'text', description: 'text' }); // text index for search
+
 export const Ticket = mongoose.models.Ticket || mongoose.model('Ticket', TicketSchema);

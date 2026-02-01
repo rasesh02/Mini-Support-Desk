@@ -19,5 +19,8 @@ const CommentSchema = new mongoose.Schema({
     timestamps: { createdAt: true, updatedAt: false } 
 });
 
+// Compound index for fast retrieval of recent comments by ticket
+CommentSchema.index({ ticketId: 1, createdAt: -1 });
+
 export const Comment = mongoose.models.Comment || mongoose.model('Comment', CommentSchema);
 
